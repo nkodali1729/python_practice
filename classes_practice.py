@@ -6,20 +6,19 @@ class Player:
 
     def __init__(self, name):
         self.name = name
-        self.score = starting_score
         self.level = 1
         self.roll = 0
 
-    @classmethod
-    def set_starting_score(cls, choice):
-        if choice == 0:
+    def set_score(self, choice):
+        if choice == "a":
             print("Standard Game Selected")
-        elif choice == 1:
+            self.score = 100
+        elif choice == "b":
             print("Rapid Game Selected")
-            cls.starting_score = 50
-        elif choice == 2:
+            self.score = 50
+        elif choice == "c":
             print("Extended Game Selected")
-            cls.starting_score = 150
+            self.score = 150
 
     def roll_die(self):
         self.roll = random.randint(1,10)
@@ -36,14 +35,14 @@ class Player:
         print(f"{self.name} has been promoted to level {self.level}!")
 
     def heal(self, roll_one, roll_two):
-        revival = Player.calculate_impact(roll_one, roll_two) * 5 * level
+        revival = Player.calculate_impact(roll_one, roll_two) * 5 * self.level
         self.score = self.score + revival
-        print(f"{self.name} healed {revival} points. Score: {self.score}")
+        print(f"{self.name} healed {revival} points.")
 
     def harm(self, roll_one, roll_two):
-        damage = Player.calculate_impact(roll_one, roll_two) * 5 * level
+        damage = Player.calculate_impact(roll_one, roll_two) * 5 * self.level
         self.score = self.score - damage
-        print(f"{self.name} was attacked and lost {damage} points. Score: {self.score}")
+        print(f"{self.name} was attacked and lost {damage} points.")
 
 #function that runs one round
 def one_round(p1, p2):
@@ -75,7 +74,29 @@ def one_round(p1, p2):
         print("It's a tie... try again.")
 
 #code that runs the entire game
-
+print("Welcome, brave warriors, to a duel to the death!")
+name_one = input("Player one, enter your name: ")
+p1 = Player(name_one)
+name_two = input("Player two, enter your name: ")
+p2 = Player(name_two)
+print("Click a for standard game, b for rapid mode, and c for extended mode")
+choice_one = input("Select your desired game length: ")
+p1.set_score(choice_one)
+p2.set_score(choice_one)
+print(f"{p1.name} and {p2.name}, GET READY TO RUMBLE!!!")
+while p1.score > 0 and p2.score > 0:
+    one_round(p1, p2)
+    print (f"{p1.name} score: {p1.score}")
+    print (f"{p2.name} score: {p2.score}")
+    quitting_input = input("Press q to exit the game...")
+    if quitting_input == "q":
+        break
+if p1.score > p2.score:
+    print(f"{p1.name} wins!")
+elif p2.score > p1.score:
+    print(f"{p2.name} wins!")
+elif p1.score == p2.score:
+    print("Mutually assured destruction! It is a draw!")
 
 
 
